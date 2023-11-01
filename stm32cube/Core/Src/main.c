@@ -241,7 +241,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int hour = 15 , minute = 8 , second = 50;
+  int hour = 11 , minute = 8 , second = 50;
 
   while (1)
   {
@@ -393,7 +393,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int hour = 15 , minute = 8 , second = 50;
 int counter = 100;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef *htim ){
 	if( counter > 0) {
@@ -402,9 +401,15 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef *htim ){
 			counter = 100;
 			if( index_led < MAX_LED ){
 				update7SEG ( index_led ) ;
+				if(index_led == 1)
+				{
+					HAL_GPIO_WritePin(dot_GPIO_Port, dot_Pin, RESET);
+				}
+				else{
+					HAL_GPIO_WritePin(dot_GPIO_Port, dot_Pin, SET);
+				}
 				index_led ++;
 			} else index_led = 0 ;
-			HAL_GPIO_TogglePin ( dot_GPIO_Port , dot_Pin ) ;
 		}
 	}
 }
