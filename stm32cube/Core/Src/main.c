@@ -255,13 +255,57 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   int hour = 11 , minute = 8 , second = 50;
-  setTimer0(1000);
+  setTimer0(2000);
+  int display0 = 1;
+  int display1 = 0;
+  int display2 = 0;
+  int display3 = 0;
   while (1)
   {
-	if(timer0_flag == 1){
-		HAL_GPIO_TogglePin(led_GPIO_Port, led_Pin);
-		setTimer0(2000);
-	}
+	  if(timer0_flag == 1)
+	  {
+		    second++;
+		    if (second >= 60){
+		        second = 0;
+		        minute++;
+		    }
+		    if(minute >= 60){
+		        minute = 0;
+		        hour++;
+		    }
+		    if(hour >=24){
+		        hour = 0;
+		    }
+		    updateClockBuffer(hour, minute);
+		    if(display0 == 1)
+		    {
+		    	update7SEG(0);
+		    	display0 = 0 ;
+		    	display1 = 1 ;
+		    	HAL_GPIO_WritePin(dot_GPIO_Port, dot_Pin, SET);
+		    } else if(display1 == 1)
+		    {
+		    	update7SEG(1);
+		    	display1 = 0;
+		    	display2 =1 ;
+		    	HAL_GPIO_WritePin(dot_GPIO_Port, dot_Pin, RESET);
+		    }
+		    else if(display2 == 1)
+		    {
+		    	update7SEG(2);
+		    	display2 = 0;
+		    	display3 =1 ;
+		    	HAL_GPIO_WritePin(dot_GPIO_Port, dot_Pin, SET);
+		    }
+		    else if(display3 == 1)
+		    {
+		    	update7SEG(3);
+		    	display3 = 0;
+		    	display0 =1 ;
+		    	HAL_GPIO_WritePin(dot_GPIO_Port, dot_Pin, SET);
+		    }
+		    setTimer0(1000);
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
